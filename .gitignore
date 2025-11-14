@@ -1,0 +1,10 @@
+node_modules
+
+# /server/ca.pem
+
+.env
+server/.env
+server/upload/filled
+*.pdf
+server/uploads/images
+

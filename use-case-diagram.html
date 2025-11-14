@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalSetu - Use Case Diagram</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .diagram-container {
+            padding: 40px;
+            background: #f8f9fa;
+        }
+        
+        .system-boundary {
+            border: 3px solid #2c3e50;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            background: white;
+            position: relative;
+        }
+        
+        .system-title {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: white;
+            padding: 0 15px;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2c3e50;
+        }
+        
+        .actors-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .actor {
+            text-align: center;
+            margin: 10px;
+            padding: 20px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            min-width: 120px;
+        }
+        
+        .actor-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .actor-name {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .use-case-category {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+        }
+        
+        .category-ai { border-left-color: #e74c3c; }
+        .category-document { border-left-color: #f39c12; }
+        .category-advocate { border-left-color: #27ae60; }
+        .category-form { border-left-color: #9b59b6; }
+        .category-admin { border-left-color: #34495e; }
+        .category-auth { border-left-color: #16a085; }
+        
+        .category-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .use-case {
+            background: #ecf0f1;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 25px;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .use-case:hover {
+            background: #d5dbdb;
+            transform: translateX(5px);
+            border-color: #3498db;
+        }
+        
+        .use-case.primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+        
+        .use-case.primary:hover {
+            background: linear-gradient(135deg, #2980b9, #1f618d);
+        }
+        
+        .relationships {
+            margin-top: 30px;
+            padding: 25px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .relationship-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .relationship {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        
+        .extends { border-left: 4px solid #e74c3c; }
+        .includes { border-left: 4px solid #27ae60; }
+        .generalizes { border-left: 4px solid #f39c12; }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 768px) {
+            .actors-section {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .use-cases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .legend {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ LegalSetu - Use Case Diagram</h1>
+            <p>AI-Powered Multilingual Legal Assistant Platform</p>
+        </div>
+        
+        <div class="diagram-container">
+            <!-- Actors Section -->
+            <div class="actors-section">
+                <div class="actor">
+                    <div class="actor-icon">👤</div>
+                    <div class="actor-name">User/Client</div>
+                </div>
+                <div class="actor">
+                    <div class="actor-icon">👩‍⚖️</div>
+                    <div class="actor-name">Advocate</div>
+                </div>
+                <div class="actor">
+                    <div class="actor-icon">🤖</div>
+                    <div class="actor-name">AI System</div>
+                </div>
+                <div class="actor">
+                    <div class="actor-icon">👨‍💼</div>
+                    <div class="actor-name">Admin</div>
+                </div>
+                <div class="actor">
+                    <div class="actor-icon">🌐</div>
+                    <div class="actor-name">External APIs</div>
+                </div>
+            </div>
+            
+            <!-- System Boundary -->
+            <div class="system-boundary">
+                <div class="system-title">LegalSetu Platform</div>
+                
+                <!-- Use Cases Grid -->
+                <div class="use-cases-grid">
+                    <!-- AI Legal Assistant -->
+                    <div class="use-case-category category-ai">
+                        <div class="category-title">🤖 AI Legal Assistant (Neeti)</div>
+                        <div class="use-case primary">Ask Legal Questions</div>
+                        <div class="use-case">Get AI Legal Advice</div>
+                        <div class="use-case">Voice Input/Output</div>
+                        <div class="use-case">Multilingual Support</div>
+                        <div class="use-case">Chat History Management</div>
+                        <div class="use-case">Legal Recommendations</div>
+                        <div class="use-case">Constitution Search</div>
+                        <div class="use-case">Case Law Exploration</div>
+                    </div>
+                    
+                    <!-- Document Management -->
+                    <div class="use-case-category category-document">
+                        <div class="category-title">📄 Document Analysis</div>
+                        <div class="use-case primary">Upload Documents</div>
+                        <div class="use-case">AI Document Analysis</div>
+                        <div class="use-case">Extract Key Clauses</div>
+                        <div class="use-case">Identify Legal Risks</div>
+                        <div class="use-case">Get Suggestions</div>
+                        <div class="use-case">Chat with Document</div>
+                        <div class="use-case">Download Analysis</div>
+                        <div class="use-case">Document Translation</div>
+                    </div>
+                    
+                    <!-- Advocate Services -->
+                    <div class="use-case-category category-advocate">
+                        <div class="category-title">👩‍⚖️ Advocate Services</div>
+                        <div class="use-case primary">Find Nearby Advocates</div>
+                        <div class="use-case primary">Live Chat with Advocates</div>
+                        <div class="use-case">View Advocate Profiles</div>
+                        <div class="use-case">Start Consultation</div>
+                        <div class="use-case">Real-time Messaging</div>
+                        <div class="use-case">End Consultation</div>
+                        <div class="use-case">Submit Reviews</div>
+                        <div class="use-case">View Chat History</div>
+                        <div class="use-case">Pay Consultation Fees</div>
+                    </div>
+                    
+                    <!-- Form Assistance -->
+                    <div class="use-case-category category-form">
+                        <div class="category-title">📝 Form Assistant</div>
+                        <div class="use-case primary">Upload Forms</div>
+                        <div class="use-case">AI Field Detection</div>
+                        <div class="use-case">Voice Form Filling</div>
+                        <div class="use-case">Multilingual Form Support</div>
+                        <div class="use-case">Generate Filled Forms</div>
+                        <div class="use-case">Download Completed Forms</div>
+                    </div>
+                    
+                    <!-- Authentication & Profile -->
+                    <div class="use-case-category category-auth">
+                        <div class="category-title">🔐 Authentication & Profile</div>
+                        <div class="use-case primary">User Registration</div>
+                        <div class="use-case primary">User Login</div>
+                        <div class="use-case">Google OAuth</div>
+                        <div class="use-case">Profile Management</div>
+                        <div class="use-case">Language Preferences</div>
+                        <div class="use-case">Logout</div>
+                    </div>
+                    
+                    <!-- Admin Functions -->
+                    <div class="use-case-category category-admin">
+                        <div class="category-title">👨‍💼 Admin Functions</div>
+                        <div class="use-case primary">Manage Advocates</div>
+                        <div class="use-case">Approve Advocate Registration</div>
+                        <div class="use-case">Update Consultation Fees</div>
+                        <div class="use-case">View System Statistics</div>
+                        <div class="use-case">Monitor Real-time Activity</div>
+                        <div class="use-case">Delete Advocates</div>
+                        <div class="use-case">Bulk Operations</div>
+                    </div>
+                </div>
+                
+                <!-- Advocate-Specific Use Cases -->
+                <div class="use-cases-grid">
+                    <div class="use-case-category category-advocate">
+                        <div class="category-title">👩‍⚖️ Advocate Portal</div>
+                        <div class="use-case primary">Advocate Registration</div>
+                        <div class="use-case primary">Advocate Login</div>
+                        <div class="use-case">Upload Credentials</div>
+                        <div class="use-case">Manage Profile</div>
+                        <div class="use-case">Update Availability</div>
+                        <div class="use-case">View Consultations</div>
+                        <div class="use-case">Respond to Clients</div>
+                        <div class="use-case">Update Online Status</div>
+                        <div class="use-case">View Earnings</div>
+                    </div>
+                    
+                    <!-- External Integrations -->
+                    <div class="use-case-category category-ai">
+                        <div class="category-title">🌐 External Integrations</div>
+                        <div class="use-case">Google Translate API</div>
+                        <div class="use-case">Google Maps API</div>
+                        <div class="use-case">Google TTS/STT</div>
+                        <div class="use-case">Gemini AI API</div>
+                        <div class="use-case">Firebase Authentication</div>
+                        <div class="use-case">AWS S3 Storage</div>
+                        <div class="use-case">Socket.IO Real-time</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Relationships -->
+            <div class="relationships">
+                <div class="relationship-title">🔗 Key Relationships</div>
+                
+                <div class="relationship extends">
+                    <strong>Extends:</strong> "Chat with Document" extends "Upload Documents"
+                </div>
+                <div class="relationship extends">
+                    <strong>Extends:</strong> "Voice Form Filling" extends "Upload Forms"
+                </div>
+                <div class="relationship extends">
+                    <strong>Extends:</strong> "Real-time Messaging" extends "Start Consultation"
+                </div>
+                
+                <div class="relationship includes">
+                    <strong>Includes:</strong> "Get AI Legal Advice" includes "Multilingual Support"
+                </div>
+                <div class="relationship includes">
+                    <strong>Includes:</strong> "AI Document Analysis" includes "Extract Key Clauses"
+                </div>
+                <div class="relationship includes">
+                    <strong>Includes:</strong> "Find Nearby Advocates" includes "Google Maps API"
+                </div>
+                
+                <div class="relationship generalizes">
+                    <strong>Generalizes:</strong> "User" generalizes to "Client" and "Advocate"
+                </div>
+                <div class="relationship generalizes">
+                    <strong>Generalizes:</strong> "Authentication" generalizes to "User Login" and "Advocate Login"
+                </div>
+            </div>
+            
+            <!-- Legend -->
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e74c3c;"></div>
+                    <span>AI Features</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f39c12;"></div>
+                    <span>Document Management</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #27ae60;"></div>
+                    <span>Advocate Services</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #9b59b6;"></div>
+                    <span>Form Processing</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #16a085;"></div>
+                    <span>Authentication</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #34495e;"></div>
+                    <span>Admin Functions</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add interactive functionality
+        document.querySelectorAll('.use-case').forEach(useCase => {
+            useCase.addEventListener('click', function() {
+                // Add a subtle animation when clicked
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+        
+        // Add hover effects for actors
+        document.querySelectorAll('.actor').forEach(actor => {
+            actor.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            actor.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
